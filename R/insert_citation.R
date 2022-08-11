@@ -50,12 +50,13 @@ insert_citation <- function(
   }
 
   context <- NULL
-  if(rstudioapi::hasFun("getSourceEditorContext")) {
+  if(rstudioapi::hasFun("getActiveDocumentContext")) {
+    context <- rstudioapi::getActiveDocumentContext()
+  }  
+  else if(rstudioapi::hasFun("getSourceEditorContext")) {
     context <- tryCatch(rstudioapi::getSourceEditorContext(), error = function(e) NULL)
   }
-  else if(rstudioapi::hasFun("getActiveDocumentContext")) {
-    context <- rstudioapi::getActiveDocumentContext()
-  }
+
   if (is.null(context)) stop(
     "The use of this addin requires RStudio 0.99.796 or newer (your version is "
     , rstudioapi::versionInfo()$version
